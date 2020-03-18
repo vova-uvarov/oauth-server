@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: oauth-server
+  cloud:
+    config:
+      uri: http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}
+      failFast: true
+      retry:
+        maxAttempts: 100
+        maxInterval: 10000

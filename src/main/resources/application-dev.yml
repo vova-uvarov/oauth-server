@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/oauth_my
+    username: postgres
+    password: p123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generateDdl: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.PostgreSQL94Dialect"
+      jdbc:
+        lob:
+          non_contextual_creation: true # https://github.com/pgjdbc/pgjdbc/issues/1102
+  liquibase:
+    drop-first: true

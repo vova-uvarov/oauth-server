@@ -1,0 +1,118 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <property name="blob_type" value="bytea" dbms="postgresql"/>
+    <property name="blob_type" value="blob" dbms="h2"/>
+
+    <changeSet author="vova.uvarov" id="20200318-2115">
+        <createTable tableName="authority">
+            <column name="id" remarks="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="authority_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" uniqueConstraintName="authority_name_uk"/>
+            </column>
+            <column name="description" type="varchar(1024)"/>
+            <column name="ins_time" remarks="Дата время вставки записи" type="datetime"/>
+            <column name="modif_time" remarks="Дата время модификации записи" type="datetime"/>
+        </createTable>
+
+        <createTable tableName="authority_group">
+            <column name="id" remarks="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="authority_group_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" uniqueConstraintName="authority_group_name_uk"/>
+            </column>
+            <column name="description" type="varchar(1024)"/>
+            <column name="ins_time" remarks="Дата время вставки записи" type="datetime"/>
+            <column name="modif_time" remarks="Дата время модификации записи" type="datetime"/>
+        </createTable>
+
+        <createTable tableName="auth_group2authority">
+            <column name="group_id" type="bigint">
+                <constraints nullable="false" references="authority_group(id)"
+                             foreignKeyName="auth_group2authority_group_fk"/>
+            </column>
+            <column name="authority_id" type="bigint">
+                <constraints references="authority(id)" foreignKeyName="auth_group2authority_authority_fk"
+                             nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="oauth_client_details">
+            <column name="client_id" type="varchar(256)">
+                <constraints primaryKey="true" primaryKeyName="pk_oauth_client_details"/>
+            </column>
+            <column name="resource_ids" type="varchar(256)"/>
+            <column name="client_secret" type="varchar(256)"/>
+            <column name="scope" type="varchar(256)"/>
+            <column name="authorized_grant_types" type="varchar(256)"/>
+            <column name="web_server_redirect_uri" type="varchar(256)"/>
+            <column name="authorities" type="varchar(256)"/>
+            <column name="access_token_validity" type="int"/>
+            <column name="refresh_token_validity" type="int"/>
+            <column name="additional_information" type="varchar(4096)"/>
+            <column name="autoapprove" type="varchar(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_refresh_token">
+            <column name="token_id" type="varchar(255)"/>
+            <column name="token" type="${blob_type}"/>
+            <column name="authentication" type="${blob_type}"/>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="user_data_pkey" unique="true" nullable="false"/>
+            </column>
+
+            <column name="username" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="varchar(1024)"/>
+            <column name="phone" type="varchar(32)"/>
+            <column name="account_confirmed" type="boolean"/>
+            <column name="account_expired" type="boolean"/>
+            <column name="account_locked" type="boolean"/>
+            <column name="credentials_expired" type="boolean"/>
+            <column name="enabled" type="boolean"/>
+            <column name="password" type="varchar(255)"/>
+
+            <column name="ins_time" remarks="Дата время вставки записи" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modif_time" remarks="Дата время модификации записи" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+
+        <createTable tableName="user2authority">
+            <column name="user_id" type="uuid">
+                <constraints nullable="false" references="users(id)" foreignKeyName="user2authority_user_fk"/>
+            </column>
+
+            <column name="authority_id" type="bigint">
+                <constraints nullable="false" references="authority(id)" foreignKeyName="user2authority_authority_fk"/>
+            </column>
+
+        </createTable>
+
+        <createTable tableName="user2authority_group">
+
+            <column name="user_id" type="uuid">
+                <constraints nullable="false" references="users(id)" foreignKeyName="user2authority_group_user_fk"/>
+            </column>
+            <column name="group_id" type="bigint">
+                <constraints nullable="false" references="authority_group(id)"
+                             foreignKeyName="user2authority_group_group_fk"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

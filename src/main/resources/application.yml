@@ -1,0 +1,45 @@
+server:
+  port: 9999
+
+spring:
+  cloud:
+    consul:
+      discovery:
+        tags: infrastracture
+#production db can be get from config-server
+  datasource:
+    url: jdbc:h2:mem:oauthdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    generateDdl: false
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true # https://github.com/pgjdbc/pgjdbc/issues/1102
+  liquibase:
+    drop-first: false
+    changeLog: classpath:/liquibase/db.changelog-master.xml
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+security:
+  oauth2:
+    authorization:
+      jwt:
+        #todo это надоа на config-server вынести
+        key-store: classpath:jwt/jwt.jks
+        key-alias: jwt
+        key-store-password: storePassword
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
