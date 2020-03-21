@@ -88,7 +88,6 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                    .antMatchers("/api/register/**").permitAll()
                     .anyRequest().authenticated();
         }
     }
