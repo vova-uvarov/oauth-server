@@ -15,4 +15,4 @@ spring:
         lob:
           non_contextual_creation: true # https://github.com/pgjdbc/pgjdbc/issues/1102
   liquibase:
-    drop-first: true
+    drop-first: false
