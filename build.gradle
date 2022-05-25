@@ -30,7 +30,7 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok"
 
     implementation 'com.h2database:h2'
-    implementation 'org.postgresql:postgresql:42.2.16'
+    implementation 'org.postgresql:postgresql:42.3.6'
     implementation 'org.liquibase:liquibase-core:4.1.0'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
